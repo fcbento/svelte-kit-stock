@@ -5,9 +5,11 @@
 	import Select, { Option } from '@smui/select';
 	import { createEventDispatcher } from 'svelte';
 	import { formValues } from '../stores/form';
+	import type { FormFields } from 'src/models/form';
+import type { Content } from 'src/models/content.type';
 
-	export let fields;
-	let value;
+	export let fields: FormFields[];
+	let value: string;
 
 	const dispatch = createEventDispatcher();
 	const submit = () => dispatch('submit');
@@ -18,29 +20,26 @@
 		submit();
 	};
 
-	const toObject = (fields) => {
-		const obj = fields.reduce( (o, key) => ({ ...o, [key.name]: key.isSelect ? getSelectedValue(value) : key.value }),{});
-
-		if (!isEmpty(obj)) return obj;
+	const toObject = (fields: FormFields[]): Object => {
+		const formObject = fields.reduce( (o, key) => ({ ...o, [key.name]: key.isSelect ? getSelectedValue(value) : key.value }),{});
+		return !isEmpty(formObject) ? formObject : null;
 	};
 
-	const isEmpty = (obj) => {
-		let notEmpty = false;
+	const isEmpty = (formObject: Object): boolean => {
+		let empty = false;
 
-		Object.values(obj).filter((key) => {
-			if (key === undefined || key === null || key === '') {
-				notEmpty = true;
-			}
+		Object.values(formObject).filter((key) => {
+			if (key === undefined || key === null || key === '') empty = true;
 		});
 
-		return notEmpty;
+		return empty;
 	};
 
-	const getSelectedValue = (value: string) => {
-		let selectedObect = {};
+	const getSelectedValue = (value: string): Content => {
+		let selectedObect: Content;
 
-		fields.forEach((field) => {
-			if (field.isSelect) selectedObect = field.data.filter((item) => item.name === value)[0];
+		fields.forEach((field: FormFields) => {
+			if (field.isSelect) selectedObect = field.data.filter((item: Content) => item.name === value)[0];
 		});
 
 		return selectedObect;
@@ -51,7 +50,7 @@
 	{#each fields as field}
 
 		{#if !field.isSelect}
-			<Cell span={5}>
+			<Cell span= {5}>
 				<Textfield
 					bind:value={field.value}
 					label={field.label}
