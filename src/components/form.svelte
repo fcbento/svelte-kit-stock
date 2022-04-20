@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
 	import LayoutGrid, { Cell } from '@smui/layout-grid';
 	import Textfield from '@smui/textfield';
 	import Button, { Label } from '@smui/button';
 	import Select, { Option } from '@smui/select';
 	import { createEventDispatcher } from 'svelte';
-	import {formValues} from '../stores/form';
+	import { formValues } from '../stores/form';
 
 	export let fields;
 	let value;
@@ -14,21 +14,12 @@
 
 	let save = () => {
 		const formObject = toObject(fields);
-
-		if(formObject) {
-			formValues.set(formObject);
-		}else{
-			formValues.set('error');
-		}
-		
+		formValues.set(formObject);
 		submit();
 	};
 
-	const toObject = (arr) => {
-		let obj = arr.reduce(
-			(o, key) => ({ ...o, [key.name]: key.isSelect ? getSelectedValue(value) : key.value }),
-			{}
-		);
+	const toObject = (fields) => {
+		const obj = fields.reduce( (o, key) => ({ ...o, [key.name]: key.isSelect ? getSelectedValue(value) : key.value }),{});
 
 		if (!isEmpty(obj)) return obj;
 	};
@@ -37,7 +28,7 @@
 		let notEmpty = false;
 
 		Object.values(obj).filter((key) => {
-			if (key == undefined || key == null || key == '') {
+			if (key === undefined || key === null || key === '') {
 				notEmpty = true;
 			}
 		});
@@ -45,7 +36,7 @@
 		return notEmpty;
 	};
 
-	const getSelectedValue = (value) => {
+	const getSelectedValue = (value: string) => {
 		let selectedObect = {};
 
 		fields.forEach((field) => {
@@ -58,6 +49,7 @@
 
 <LayoutGrid fixedColumnWidth>
 	{#each fields as field}
+
 		{#if !field.isSelect}
 			<Cell span={5}>
 				<Textfield
@@ -78,6 +70,7 @@
 				</Select>
 			</Cell>
 		{/if}
+
 	{/each}
 </LayoutGrid>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import LayoutGrid, { Cell } from '@smui/layout-grid';
-	import { UsersColumns, UsersHeaders } from '../models/users/users-table';
+	import { UsersColumns, UsersHeaders } from '../models/users';
 	import Table from '../components/table.svelte';
 	import { fetchUsers, users } from '../stores/users';
 	import type { Pagination, TableColumn, TableData, TableHeader } from 'src/models/table';

@@ -1,4 +1,10 @@
-import type { TableColumn, TableHeader } from "../table";
+import type { TableColumn, TableHeader } from "./table";
+
+export interface Category {
+    categoryId: number;
+    createdAt?: Date;
+    name?: string
+}
 
 export const CategoryColumns: TableColumn[] = [
     {

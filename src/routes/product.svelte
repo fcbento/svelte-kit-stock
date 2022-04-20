@@ -3,11 +3,11 @@
 	import { fetchProducts, products } from '../stores/products';
 	import Accordion, { Panel, Header, Content } from '@smui-extra/accordion';
 	import IconButton, { Icon } from '@smui/icon-button';
-	import { ProductColumns, ProductHeaders } from '../models/products/product-table';
+	import { ProductColumns, ProductHeaders, ProductFormBuilder } from '../models/products';
 	import type { Pagination, TableColumn, TableData, TableHeader } from 'src/models/table';
 	import { categories } from '../stores/category';
 	import Form from '../components/form.svelte';
-	import {formValues} from '../stores/form';
+	import { formValues } from '../stores/form';
 
 	const headers: TableHeader[] = ProductHeaders;
 	const columns: TableColumn[] = ProductColumns;
@@ -19,50 +19,19 @@
 	let addProduct = false;
 	let error = false;
 
-	let formFields = [
-		{
-			name: 'name',
-			label: 'Name',
-			type: 'text',
-			value: ''
-		},
-		{
-			name: 'category',
-			label: 'Category',
-			isSelect: true,
-			data: categoryStore.content,
-			value: ''
-		},
-		{
-			name: 'quantity',
-			label: 'Quantity',
-			type: 'number',
-			value: ''
-		},
-		{
-			name: 'image',
-			label: 'Image',
-			type: 'text',
-			value: ''
-		},
-		{
-			name: 'price',
-			label: 'Price',
-			type: 'number',
-			value: ''
-		}
-	];
+	let formFields = ProductFormBuilder(categoryStore.content);
 
 	const fetchProductsPaginated = () => {
 		fetchProducts(pagination.rowsPerPage, pagination.page);
 	};
 
 	const registerProduct = () => {
-		if($formValues === 'error') {
-			error = true;
-		}else{
-			error = false;
-		}
+		console.log($formValues)
+		// if ($formValues) {
+		// 	error = false;
+		// } else {
+		// 	error = true;
+		// }
 	};
 </script>
 
@@ -105,7 +74,6 @@
 		</Panel>
 	</Accordion>
 </div>
-
 
 {#if error}
 	<h1>something went wrong</h1>
