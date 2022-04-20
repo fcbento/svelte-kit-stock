@@ -1,5 +1,5 @@
 export interface Category {
     categoryId: number;
-    createdAt: Date;
-    name: string
+    createdAt?: Date;
+    name?: string
 }

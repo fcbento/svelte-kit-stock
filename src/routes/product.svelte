@@ -4,14 +4,10 @@
 	import Accordion, { Panel, Header, Content } from '@smui-extra/accordion';
 	import IconButton, { Icon } from '@smui/icon-button';
 	import { ProductColumns, ProductHeaders } from '../models/products/product-table';
-	import Textfield from '@smui/textfield';
-	import Select, { Option } from '@smui/select';
-	import LayoutGrid, { Cell } from '@smui/layout-grid';
-	import Button, { Label } from '@smui/button';
 	import type { Pagination, TableColumn, TableData, TableHeader } from 'src/models/table';
-	import type { Product } from 'src/models/products/products';
 	import { categories } from '../stores/category';
-	import type { Category } from 'src/models/category/category';
+	import Form from '../components/form.svelte';
+	import {formValues} from '../stores/form';
 
 	const headers: TableHeader[] = ProductHeaders;
 	const columns: TableColumn[] = ProductColumns;
@@ -21,30 +17,53 @@
 	let pagination: Pagination;
 	let productsList = false;
 	let addProduct = false;
-	let value: Category;
+	let error = false;
 
-	let formFields: Product = {
-		name: '',
-		category: {
-			categoryId: 0,
-			createdAt: new Date(),
-			name: ''
+	let formFields = [
+		{
+			name: 'name',
+			label: 'Name',
+			type: 'text',
+			value: ''
 		},
-		image: '',
-		price: null,
-		quantity: null
-	};
+		{
+			name: 'category',
+			label: 'Category',
+			isSelect: true,
+			data: categoryStore.content,
+			value: ''
+		},
+		{
+			name: 'quantity',
+			label: 'Quantity',
+			type: 'number',
+			value: ''
+		},
+		{
+			name: 'image',
+			label: 'Image',
+			type: 'text',
+			value: ''
+		},
+		{
+			name: 'price',
+			label: 'Price',
+			type: 'number',
+			value: ''
+		}
+	];
 
-	
 	const fetchProductsPaginated = () => {
 		fetchProducts(pagination.rowsPerPage, pagination.page);
 	};
 
 	const registerProduct = () => {
-		const category = categoryStore.content.filter(item => item.name === value)[0];
-		formFields.category = category;
+		if($formValues === 'error') {
+			error = true;
+		}else{
+			error = false;
+		}
 	};
-
 </script>
 
 <div class="accordion-container">
@@ -81,44 +100,13 @@
 			</Header>
 
 			<Content>
-				<LayoutGrid fixedColumnWidth>
-					<Cell span={5}>
-						<Textfield bind:value={formFields.name} label="Name" style="min-width: 100%;" />
-					</Cell>
-
-					<Cell span={5}>
-						<Select bind:value label="Select Menu">
-							{#each categoryStore.content as category}
-								<Option value={category.name}>{category.name}</Option>
-							{/each}
-						</Select>
-					</Cell>
-				</LayoutGrid>
-
-				<LayoutGrid fixedColumnWidth>
-					<Cell span={5}>
-						<Textfield bind:value={formFields.image} label="Image URL" style="min-width: 100%;" />
-					</Cell>
-
-					<Cell span={5}>
-						<Textfield bind:value={formFields.price} label="Price" style="min-width: 100%;" type="number"/>
-					</Cell>
-				</LayoutGrid>
-
-				<LayoutGrid fixedColumnWidth>
-					<Cell span={5}>
-						<Textfield bind:value={formFields.quantity} label="Quantity" style="min-width: 100%;" type="number"/>
-					</Cell>
-				</LayoutGrid>
-
-				<LayoutGrid fixedColumnWidth>
-					<Cell>
-						<Button on:click={registerProduct} variant="unelevated">
-							<Label>Register</Label>
-						</Button>
-					</Cell>
-				</LayoutGrid>
+				<Form on:submit={registerProduct} bind:fields={formFields} />
 			</Content>
 		</Panel>
 	</Accordion>
 </div>
+
+
+{#if error}
+	<h1>something went wrong</h1>
+{/if}
