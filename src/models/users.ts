@@ -1,4 +1,5 @@
 import type { TableColumn, TableHeader } from "../models/table";
+import type { FormFields } from "./form";
 
 export interface Users {
     addressList: [];
@@ -34,3 +35,32 @@ export const UsersHeaders: TableHeader[] = [
         name: 'Role'
     }
 ]
+
+export const UserFormBuilder = (): FormFields[] => {
+    return [
+        {
+            name: 'name',
+            label: 'Name',
+            type: 'text',
+            value: ''
+        },
+        {
+            name: 'email',
+            label: 'Email',
+            type: 'email',
+            value: ''
+        },
+        {
+            name: 'role',
+            label: 'Role',
+            type: 'number',
+            value: ''
+        },
+        {
+            name: 'password',
+            label: 'Password',
+            type: 'text',
+            value: ''
+        }
+    ];
+}
