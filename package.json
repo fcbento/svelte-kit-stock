@@ -14,6 +14,7 @@
     "smui-theme": "smui-theme compile static/smui.css -i src/theme"
   },
   "devDependencies": {
+    "@smui-extra/badge": "^6.0.0-beta.16",
     "@smui/layout-grid": "^6.0.0-beta.16",
     "@smui/snackbar": "^6.0.0-beta.16",
     "@sveltejs/adapter-auto": "next",

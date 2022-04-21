@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Table from '../components/table.svelte';
-	import { fetchProducts, products, create } from '../stores/products';
+	import { fetchProducts, products, create, remove } from '../stores/products';
 	import Accordion, { Panel, Header, Content } from '@smui-extra/accordion';
 	import IconButton, { Icon } from '@smui/icon-button';
 	import { ProductColumns, ProductHeaders, ProductFormBuilder } from '../models/products';
@@ -8,6 +8,9 @@
 	import { categories } from '../stores/category';
 	import Form from '../components/form.svelte';
 	import { formValues } from '../stores/form';
+	import { selectedValues } from '../stores/table';
+	import Button, { Label } from '@smui/button';
+	import Badge from '@smui-extra/badge';
 
 	const headers: TableHeader[] = ProductHeaders;
 	const columns: TableColumn[] = ProductColumns;
@@ -18,6 +21,7 @@
 	let productsList = false;
 	let addProduct = false;
 	let error = false;
+	let deleteButton = false;
 
 	let formFields = ProductFormBuilder(categoryStore.content);
 
@@ -29,6 +33,14 @@
 		create($formValues);
 		fetchProducts();
 	};
+
+	const deleteProduct = () => {
+		deleteButton = $selectedValues.length > 0 ? true : false;
+	};
+
+	const removeProduct = () => {
+		remove($selectedValues)
+	}
 </script>
 
 <div class="accordion-container">
@@ -51,7 +63,15 @@
 					showCheckbox={true}
 					bind:value={pagination}
 					on:submit={fetchProductsPaginated}
+					on:click={deleteProduct}
+					showDeleteButton={deleteButton}
 				/>
+				{#if $selectedValues.length > 0}
+					<Button style="position: relative; margin-top: 10px;" on:click={removeProduct}>
+						<Label>Remove</Label>
+						<Badge aria-label="new messages count">{$selectedValues.length }</Badge>
+				  	</Button>
+				{/if}
 			</Content>
 		</Panel>
 

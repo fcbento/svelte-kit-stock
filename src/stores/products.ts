@@ -1,6 +1,7 @@
 import type { TableData } from "src/models/table";
 import { writable } from "svelte/store";
 import axios from 'axios';
+import { selectedValues } from './table';
 
 let emptyProducts: TableData;
 
@@ -23,7 +24,13 @@ const create = async (formValues) => {
         });
 }
 
+const remove = async (ids) => {
+    return axios.post('http://localhost:8080/api/products/remove', ids).then(res => {
+        fetchProducts();
+        selectedValues.set([]);
+    });
+}
 
 fetchProducts();
 
-export { fetchProducts, create };
+export { fetchProducts, create, remove };

@@ -1,12 +1,13 @@
 <script lang="ts">
 	import DataTable, { Head, Body, Row, Cell, Pagination } from '@smui/data-table';
 	import Checkbox from '@smui/checkbox';
-	import { onMount } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 	import Select, { Option } from '@smui/select';
 	import IconButton from '@smui/icon-button';
 	import { Label } from '@smui/common';
 	import { createEventDispatcher } from 'svelte';
 	import { TableColumns } from '../utils/table-columns';
+	import {selectedValues} from '../stores/table';
 	import type { TableColumn, TableData, TableHeader } from 'src/models/table';
 
 	export let tableDataSource: TableData;
@@ -14,6 +15,7 @@
 	export let columns: TableColumn[];
 	export let showCheckbox: boolean;
 	export let value = {};
+	export let showDeleteButton: boolean;
 
 	const tableColumns = new TableColumns();
 
@@ -25,6 +27,7 @@
 
 	const dispatch = createEventDispatcher();
 	const submit = () => dispatch('submit');
+	const click = () => dispatch('click');
 
 	onMount(async () => {
 		setStartEnd(tableDataSource.number);
@@ -60,6 +63,12 @@
 		};
 		return types[type]();
 	};
+
+	afterUpdate(() => {
+		selectedValues.set(selected);
+		click();
+	});
+
 </script>
 
 <!-- svelte-ignore missing-declaration -->
@@ -84,7 +93,7 @@
 			<Row>
 				{#if showCheckbox}
 					<Cell checkbox>
-						<Checkbox bind:group={selected} value={item} valueKey={item.name} />
+						<Checkbox bind:group={selected} value={item} valueKey={item} on:change{getValues}/>
 					</Cell>
 				{/if}
 
