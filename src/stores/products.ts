@@ -1,5 +1,6 @@
 import type { TableData } from "src/models/table";
 import { writable } from "svelte/store";
+import axios from 'axios';
 
 let emptyProducts: TableData;
 
@@ -12,6 +13,17 @@ const fetchProducts = async (size = 10, page = 0) => {
     products.set(data);
 }
 
+const create = async (formValues) => {
+    return axios.post('http://localhost:8080/api/products', formValues)
+        .then((res) => {
+            return res;
+        })
+        .catch((error) => {
+            return error;
+        });
+}
+
+
 fetchProducts();
 
-export { fetchProducts };
+export { fetchProducts, create };

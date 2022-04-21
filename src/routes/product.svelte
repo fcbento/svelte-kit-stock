@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Table from '../components/table.svelte';
-	import { fetchProducts, products } from '../stores/products';
+	import { fetchProducts, products, create } from '../stores/products';
 	import Accordion, { Panel, Header, Content } from '@smui-extra/accordion';
 	import IconButton, { Icon } from '@smui/icon-button';
 	import { ProductColumns, ProductHeaders, ProductFormBuilder } from '../models/products';
@@ -26,12 +26,8 @@
 	};
 
 	const registerProduct = () => {
-		console.log($formValues)
-		// if ($formValues) {
-		// 	error = false;
-		// } else {
-		// 	error = true;
-		// }
+		create($formValues);
+		fetchProducts();
 	};
 </script>
 

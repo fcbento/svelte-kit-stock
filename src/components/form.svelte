@@ -6,10 +6,11 @@
 	import { createEventDispatcher } from 'svelte';
 	import { formValues } from '../stores/form';
 	import type { FormFields } from 'src/models/form';
-import type { Content } from 'src/models/content.type';
+	import type { Content } from 'src/models/content.type';
 
 	export let fields: FormFields[];
 	let value: string;
+	let disabled = true;
 
 	const dispatch = createEventDispatcher();
 	const submit = () => dispatch('submit');
@@ -21,7 +22,14 @@ import type { Content } from 'src/models/content.type';
 	};
 
 	const toObject = (fields: FormFields[]): Object => {
-		const formObject = fields.reduce( (o, key) => ({ ...o, [key.name]: key.isSelect ? getSelectedValue(value) : key.value }),{});
+		const formObject = fields.reduce(
+			(o, key) => ({
+				...o,
+				[key.name]: key.isSelect ? getSelectedValue(value) : key.value
+			}),
+			{}
+		);
+
 		return !isEmpty(formObject) ? formObject : null;
 	};
 
@@ -29,7 +37,14 @@ import type { Content } from 'src/models/content.type';
 		let empty = false;
 
 		Object.values(formObject).filter((key) => {
-			if (key === undefined || key === null || key === '') empty = true;
+			if (
+				key === undefined ||
+				key === null ||
+				key === '' ||
+				key === 0 ||
+				(typeof key === 'object' && key?.length === 0)
+			)
+				empty = true;
 		});
 
 		return empty;
@@ -39,23 +54,29 @@ import type { Content } from 'src/models/content.type';
 		let selectedObect: Content;
 
 		fields.forEach((field: FormFields) => {
-			if (field.isSelect) selectedObect = field.data.filter((item: Content) => item.name === value)[0];
+			if (field.isSelect)
+				selectedObect = field.data.filter((item: Content) => item.name === value)[0];
 		});
 
 		return selectedObect;
+	};
+
+	const disableButton = () => {
+		const form = toObject(fields);
+		disabled = !form ? true : false;
 	};
 </script>
 
 <LayoutGrid fixedColumnWidth>
 	{#each fields as field}
-
 		{#if !field.isSelect}
-			<Cell span= {5}>
+			<Cell span={5}>
 				<Textfield
 					bind:value={field.value}
 					label={field.label}
 					style="min-width: 100%;"
 					type={field.type}
+					on:change={disableButton}
 				/>
 			</Cell>
 		{/if}
@@ -69,13 +90,12 @@ import type { Content } from 'src/models/content.type';
 				</Select>
 			</Cell>
 		{/if}
-
 	{/each}
 </LayoutGrid>
 
 <LayoutGrid fixedColumnWidth>
 	<Cell>
-		<Button on:click={save} variant="unelevated">
+		<Button on:click={save} variant="unelevated" {disabled}>
 			<Label>Register</Label>
 		</Button>
 	</Cell>
