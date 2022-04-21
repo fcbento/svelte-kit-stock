@@ -15,7 +15,6 @@
 	export let columns: TableColumn[];
 	export let showCheckbox: boolean;
 	export let value = {};
-	export let showDeleteButton: boolean;
 
 	const tableColumns = new TableColumns();
 

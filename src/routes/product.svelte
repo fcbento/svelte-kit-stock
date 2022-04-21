@@ -14,14 +14,12 @@
 
 	const headers: TableHeader[] = ProductHeaders;
 	const columns: TableColumn[] = ProductColumns;
-	const productsStore: TableData = $products;
 	const categoryStore: TableData = $categories;
 
 	let pagination: Pagination;
 	let productsList = false;
 	let addProduct = false;
 	let error = false;
-	let deleteButton = false;
 
 	let formFields = ProductFormBuilder(categoryStore.content);
 
@@ -34,10 +32,6 @@
 		fetchProducts();
 	};
 
-	const deleteProduct = () => {
-		deleteButton = $selectedValues.length > 0 ? true : false;
-	};
-
 	const removeProduct = () => {
 		remove($selectedValues)
 	}
@@ -48,7 +42,7 @@
 		<Panel bind:open={productsList}>
 			<Header>
 				Products List
-				<span slot="description"> Total: {productsStore.totalElements}</span>
+				<span slot="description"> Total: {$products.totalElements}</span>
 				<IconButton slot="icon" toggle pressed={productsList}>
 					<Icon class="material-icons" on>expand_less</Icon>
 					<Icon class="material-icons">expand_more</Icon>
@@ -63,8 +57,6 @@
 					showCheckbox={true}
 					bind:value={pagination}
 					on:submit={fetchProductsPaginated}
-					on:click={deleteProduct}
-					showDeleteButton={deleteButton}
 				/>
 				{#if $selectedValues.length > 0}
 					<Button style="position: relative; margin-top: 10px;" on:click={removeProduct}>
