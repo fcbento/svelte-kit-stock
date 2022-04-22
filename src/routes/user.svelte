@@ -25,9 +25,11 @@
 	};
 
 	const removeUser = () => {
+		
 		$selectedValues.forEach((item) => {
 			delete item.profiles;
-		})
+		});
+
 		remove($selectedValues);
 	}
 
@@ -56,7 +58,6 @@
 					showCheckbox={true}
 					bind:value={pagination}
 					on:submit={fetchUsersPaginated}
-					showDeleteButton={true}
 				/>
 				{#if $selectedValues.length > 0}
 					<Button style="position: relative; margin-top: 10px;" on:click={removeUser}>

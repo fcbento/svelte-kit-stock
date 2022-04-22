@@ -7,14 +7,14 @@
 	import Tab, { Label } from '@smui/tab';
 	import TabBar from '@smui/tab-bar';
 	import Home from './home.svelte';
-	import { UserInfo } from '../utils/user-info';
+	import { Utils } from '../utils/utils';
 	import LayoutGrid, { Cell } from '@smui/layout-grid';
 
 	let canSee = false;
-	const userInfo = new UserInfo();
+	const utils = new Utils();
 
 	onMount(async () => {
-		const isAdmin = userInfo
+		const isAdmin = utils
 			.getInfo()
 			.authorities.filter((item) => item.authority === 'ROLE_ADMIN');
 		isAdmin.length > 0 ? (canSee = true) : (canSee = false);

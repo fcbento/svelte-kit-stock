@@ -3,7 +3,7 @@
 	import Textfield from '@smui/textfield';
 	import Button, { Label } from '@smui/button';
 	import Select, { Option } from '@smui/select';
-	import { createEventDispatcher } from 'svelte';
+	import { afterUpdate, createEventDispatcher } from 'svelte';
 	import { formValues } from '../stores/form';
 	import type { FormFields } from 'src/models/form';
 	import type { Content } from 'src/models/content.type';
@@ -65,6 +65,11 @@
 		const form = toObject(fields);
 		disabled = !form ? true : false;
 	};
+
+	afterUpdate(() => {
+		disableButton();
+	});
+	
 </script>
 
 <LayoutGrid fixedColumnWidth>
@@ -76,7 +81,6 @@
 					label={field.label}
 					style="min-width: 100%;"
 					type={field.type}
-					on:change={disableButton}
 				/>
 			</Cell>
 		{/if}
