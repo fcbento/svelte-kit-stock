@@ -33,7 +33,7 @@
 	};
 
 	const removeProduct = () => {
-		remove($selectedValues)
+		remove($selectedValues);
 	}
 </script>
 

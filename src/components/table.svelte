@@ -26,9 +26,12 @@
 
 	const dispatch = createEventDispatcher();
 	const submit = () => dispatch('submit');
-	const click = () => dispatch('click');
 
 	onMount(async () => {
+		setStartEnd(tableDataSource.number);
+	});
+
+	afterUpdate(async() => {
 		setStartEnd(tableDataSource.number);
 	});
 
@@ -63,11 +66,6 @@
 		return types[type]();
 	};
 
-	afterUpdate(() => {
-		selectedValues.set(selected);
-		click();
-	});
-
 </script>
 
 <!-- svelte-ignore missing-declaration -->
@@ -92,7 +90,8 @@
 			<Row>
 				{#if showCheckbox}
 					<Cell checkbox>
-						<Checkbox bind:group={selected} value={item} valueKey={item} on:change{getValues}/>
+						<Checkbox bind:group={$selectedValues} value={item} valueKey={item}/>
+																										
 					</Cell>
 				{/if}
 

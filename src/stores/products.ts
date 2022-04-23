@@ -1,7 +1,9 @@
 import type { TableData } from "src/models/table";
 import { writable } from "svelte/store";
-import axios from 'axios';
 import { selectedValues } from './table';
+import { formValues } from "./form";
+import axios from 'axios';
+
 
 let emptyProducts: TableData;
 
@@ -14,9 +16,10 @@ const fetchProducts = async (size = 10, page = 0) => {
     products.set(data);
 }
 
-const create = async (formValues) => {
-    return axios.post('http://localhost:8080/api/products', formValues)
+const create = async (form) => {
+    return axios.post('http://localhost:8080/api/products', form)
         .then((res) => {
+            formValues.set([]);
             return res;
         })
         .catch((error) => {
@@ -26,8 +29,8 @@ const create = async (formValues) => {
 
 const remove = async (ids) => {
     return axios.post('http://localhost:8080/api/products/remove', ids).then(res => {
-        fetchProducts();
         selectedValues.set([]);
+        fetchProducts();
     });
 }
 

@@ -13,9 +13,9 @@
 	let disabled = true;
 
 	const dispatch = createEventDispatcher();
-	const submit = () => dispatch('submit');
+	const submit = (): void => dispatch('submit');
 
-	let save = () => {
+	let save = (): void => {
 		const formObject = toObject(fields);
 		formValues.set(formObject);
 		submit();
@@ -61,7 +61,7 @@
 		return selectedObect;
 	};
 
-	const disableButton = () => {
+	const disableButton = (): void => {
 		const form = toObject(fields);
 		disabled = !form ? true : false;
 	};
