@@ -6,7 +6,7 @@
 	import IconButton from '@smui/icon-button';
 	import { Label } from '@smui/common';
 	import { createEventDispatcher } from 'svelte';
-	import { TableColumns } from '../utils/table-columns';
+	import { Utils } from '../utils/utils';
 	import {selectedValues} from '../stores/table';
 	import type { TableColumn, TableData, TableHeader } from 'src/models/table';
 
@@ -16,7 +16,7 @@
 	export let showCheckbox: boolean;
 	export let value = {};
 
-	const tableColumns = new TableColumns();
+	const utils = new Utils();
 
 	let selected = [];
 	let rowsPerPage = 10;
@@ -97,7 +97,7 @@
 
 				{#each columns as column}
 					<Cell>
-						{tableColumns.setTableColumns(item, column)}
+						{utils.setTableColumns(item, column)}
 					</Cell>
 				{/each}
 			</Row>
